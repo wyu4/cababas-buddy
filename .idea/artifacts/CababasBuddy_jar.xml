@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CababasBuddy:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CababasBuddy_jar</output-path>
+    <root id="archive" name="CababasBuddy.jar">
+      <element id="module-output" name="CababasBuddy" />
+    </root>
+  </artifact>
+</component>
