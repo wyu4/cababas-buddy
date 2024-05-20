@@ -6,14 +6,14 @@ import java.awt.event.ActionListener;
 public class CameluoCababas extends JButton implements ActionListener {
     private static final String CABABAS_STICKER_LEFT = "src/Resources/CababasLeft.png";
     private static final String CABABAS_STICKER_RIGHT = "src/Resources/CababasRight.png";
-    private static final int FPS = 240; // FPS of animation
+    private static final int FPS = 1000; // FPS of animation
     private static final int JUMP_LENGTH = (Toolkit.getDefaultToolkit().getScreenSize().width/10); // Pixels to jump by
     private static final long JUMP_DURATION = 1000; // Duration of animation in milliseconds
     private static final long TOTAL_FRAMES = (long)(JUMP_DURATION / (1000.0/FPS));
     private static final double X_INCREMENT = (JUMP_LENGTH / (double) TOTAL_FRAMES);
 
     private final Dimension frameSize;
-    private final StickyImageIcon imageIconL, imageIconR;
+    private final HighQualityImageIcon imageIconL, imageIconR;
     private final Timer clock;
     private boolean jumping, leave;
     private double absoluteX, absoluteY, startingX, startingY;
@@ -29,8 +29,8 @@ public class CameluoCababas extends JButton implements ActionListener {
         jumpMod = 0;
         lastTime = System.currentTimeMillis();
 
-        imageIconL = new StickyImageIcon(CABABAS_STICKER_LEFT);
-        imageIconR = new StickyImageIcon(CABABAS_STICKER_RIGHT);
+        imageIconL = new HighQualityImageIcon(CABABAS_STICKER_LEFT);
+        imageIconR = new HighQualityImageIcon(CABABAS_STICKER_RIGHT);
 
         setName("Cameluo Cababas");
         setSize((int)(frameSize.getHeight()/2), (int)(frameSize.getHeight()/2));
