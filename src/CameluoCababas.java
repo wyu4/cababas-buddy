@@ -182,7 +182,7 @@ public class CameluoCababas extends JButton implements ActionListener {
                         0,
                         JUMP_LENGTH,
                         startingHeight,
-                        (calculateDimension()*1.25),
+                        (calculateDimension()*1.1),
                         false
                 );
 
