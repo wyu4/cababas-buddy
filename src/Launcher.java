@@ -15,18 +15,14 @@ public class Launcher extends JFrame implements ActionListener {
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setIconImage(Toolkit.getDefaultToolkit().getImage("src/Resources/ImageIcon.png"));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("src\\Resources\\ImageIcon.png"));
         setUndecorated(true);
         setType(Type.UTILITY);
-        setBackground(new Color(0, 0, 0, 0));
         setLayout(null);
+        setBackground(new Color(0, 0, 0, 0));
         getContentPane().setBackground(new Color(0, 0, 0, 0));
-        setBounds(
-                0,
-                (int)(screenSize.getHeight()/2),
-                (int)(screenSize.getWidth()),
-                (int)(screenSize.getHeight()/2)
-        );
+        setSize((int)(screenSize.getWidth()), (int)(screenSize.getHeight()*0.4));
+        setLocation(0, (int)(screenSize.getHeight() - getHeight()));
         setAlwaysOnTop(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setFocusable(true);
@@ -45,7 +41,7 @@ public class Launcher extends JFrame implements ActionListener {
         // Attempt to add tray icon to the tray.
         if (loadedTrayIcon == null) {
             try {
-                TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage("src/Resources/ImageIcon.png"), "Close Cababas Buddy");
+                TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage("src\\Resources\\ImageIcon.png"), "Close Cababas Buddy");
                 trayIcon.setImageAutoSize(true);
                 SystemTray.getSystemTray().add(trayIcon);
 

@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CameluoCababas extends JButton implements ActionListener {
-    private static final String CABABAS_STICKER_LEFT = "src/Resources/CababasLeft.png";
-    private static final String CABABAS_STICKER_RIGHT = "src/Resources/CababasRight.png";
     private static final int FPS = 1000; // FPS of animation
     private static final int JUMP_LENGTH = (Toolkit.getDefaultToolkit().getScreenSize().width/10); // Pixels to jump by
     private static final long JUMP_DURATION = 1000; // Duration of animation in milliseconds
@@ -15,8 +13,8 @@ public class CameluoCababas extends JButton implements ActionListener {
     private final Dimension frameSize;
     private final HighQualityImageIcon imageIconL, imageIconR;
     private final Timer clock;
-    private boolean jumping, leave;
-    private double absoluteX, absoluteY, startingX, startingY;
+    private boolean jumping, leave, squishing, landing;
+    private double absoluteX, absoluteY, absoluteWidth, absoluteHeight, startingX, startingWidth, startingHeight, squishPos, landPos;
     private long lastTime;
     private int jumpMod;
     private Point goal;
@@ -26,30 +24,39 @@ public class CameluoCababas extends JButton implements ActionListener {
 
         leave = false;
         jumping = false;
+        squishing = false;
+        landing = false;
         jumpMod = 0;
+        squishPos = 0;
+        landPos = 0;
         lastTime = System.currentTimeMillis();
 
-        imageIconL = new HighQualityImageIcon(CABABAS_STICKER_LEFT);
-        imageIconR = new HighQualityImageIcon(CABABAS_STICKER_RIGHT);
+        imageIconL = new HighQualityImageIcon("src\\Resources\\CababasLeft.png");
+        imageIconR = new HighQualityImageIcon("src\\Resources\\CababasRight.png");
 
         setName("Cameluo Cababas");
-        setSize((int)(frameSize.getHeight()/2), (int)(frameSize.getHeight()/2));
+        setSize((int)calculateDimension(), (int)calculateDimension());
         setLocation(
                 (int)(frameSize.getWidth() + (JUMP_LENGTH/2.0)),
-                (int)(frameSize.getHeight() - (frameSize.getHeight()/2)));
-        setBackground(new Color(0, 0, 0, 0));
-        setForeground(new Color(0, 0, 0, 0));
+                (int)(frameSize.getHeight() - getHeight())
+        );
+//        setLocation(
+//                (int)(Math.random() * (frameSize.getWidth() - getWidth())),
+//                (int)(frameSize.getHeight() - (frameSize.getHeight()/2)));
+        setBackground(new Color(0, 0, 0));
+        setForeground(new Color(0, 0, 0));
         setFocusable(false);
         setBorder(null);
         setLayout(null);
         setIcon(imageIconL);
-        setContentAreaFilled(false);
+         setContentAreaFilled(false);
 
         goal = getLocation();
         absoluteX = getX();
         absoluteY = getY();
-        startingX = getX();
-        startingY = getY();
+        absoluteWidth = getWidth();
+        absoluteHeight = getHeight();
+        saveAbsoluteValues();
 
         repaint();
         revalidate();
@@ -62,28 +69,41 @@ public class CameluoCababas extends JButton implements ActionListener {
     }
 
     public void jump() {
-        if (!jumping && !leave) {
-            jumping = true;
+        if (!jumping && !leave && !squishing) {
+            squishing = true;
 
             jumpMod = calculateJumpMod();
 
             if (jumpMod > 0) {
+//                imageIcon.setMirrored(true);
                 setIcon(imageIconR);
             } else {
+//                imageIcon.setMirrored(false);
                 setIcon(imageIconL);
             }
+            setSize((int)calculateDimension(), (int)calculateDimension());
+            setLocation(getX(), goal.y);
 
             goal = new Point(
                   getX() + (jumpMod * JUMP_LENGTH),
                     (int)(frameSize.getHeight() - (frameSize.getHeight()/2))
             );
 
-            startingX = getX();
-            startingY = getY();
+            absoluteX = getX();
+            absoluteY = getY();
+            absoluteWidth = getWidth();
+            absoluteHeight = getHeight();
+            saveAbsoluteValues();
 
             lastTime = System.currentTimeMillis();
             clock.restart();
         }
+    }
+
+    private void saveAbsoluteValues() {
+        startingX = getX();
+        startingWidth = getWidth();
+        startingHeight = getHeight();
     }
 
     public void leave() {
@@ -116,8 +136,27 @@ public class CameluoCababas extends JButton implements ActionListener {
         return result;
     }
 
+    private double calculateQuadraticY(double currentX, double startingX, double goalX, double startingY, double goalY, boolean log) {
+        double h = (startingX + goalX)/2.0;
+        double k = goalY;
+        double a = (startingY - k) / Math.pow((startingX - h), 2);
+
+        double result = ( (a * Math.pow((currentX-h), 2)) + k );
+
+        if (log) {
+            System.out.println(result + " = " + a + "(" + currentX + " - " + h + ")^2 + " + k);
+        }
+
+        return result;
+    }
+
+    private double calculateDimension() {
+        return (frameSize.getHeight()/2);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
+        // System.out.println(squishing + ", " + jumping + ", " + landing);
         long currentTime = System.currentTimeMillis();
 
         if (e.getSource().equals(clock)) {
@@ -126,14 +165,33 @@ public class CameluoCababas extends JButton implements ActionListener {
             lastTime = currentTime;
 
             if (jumping) {
+                // Calculating dimensions
                 double pos = Math.abs(absoluteX - startingX);
-                double midpoint = (JUMP_LENGTH/2.0);
-                double aValue = (goal.getY()/(midpoint*midpoint));
 
                 absoluteX += ((jumpMod * X_INCREMENT) * deltaRate);
-                absoluteY = aValue * ((pos-midpoint)*(pos-midpoint));
+                absoluteY = calculateQuadraticY(
+                        pos,
+                        0,
+                        JUMP_LENGTH,
+                        goal.getY(),
+                        0,
+                        false
+                );
+                absoluteHeight = calculateQuadraticY(
+                        (pos <= JUMP_LENGTH ? pos : JUMP_LENGTH), // Cap pos to jump length
+                        0,
+                        JUMP_LENGTH,
+                        startingHeight,
+                        (calculateDimension()*1.25),
+                        false
+                );
 
-                setLocation((int) absoluteX, (int) absoluteY);
+                setBounds(
+                        (int) absoluteX,
+                        (int) absoluteY,
+                        getWidth(),
+                        (int) absoluteHeight
+                );
                 if (leave) {
                     if (pos >= (JUMP_LENGTH*2)) {
                         jumping = false;
@@ -144,11 +202,84 @@ public class CameluoCababas extends JButton implements ActionListener {
                 } else {
                     if (pos >= JUMP_LENGTH) {
                         jumping = false;
-                        setLocation(goal);
-                        clock.stop();
+                        landing = true;
+                        setBounds(
+                                goal.x,
+                                goal.y,
+                                getWidth(),
+                                (int) startingHeight
+                        );
+                        // clock.stop();
                     }
                 }
                 repaint();
+            } else if (squishing) {
+                double pos = squishPos;
+
+                squishPos += ((X_INCREMENT*5) * deltaRate);
+
+                absoluteHeight = calculateQuadraticY(
+                        pos,
+                        0,
+                        startingHeight * 0.9,
+                        startingHeight,
+                        startingHeight * 0.9,
+                        false
+                );
+
+                absoluteY = frameSize.getHeight() - absoluteHeight;
+
+                setBounds(
+                        (int) Math.round(absoluteX),
+                        (int) Math.round(absoluteY),
+                        (int) Math.round(absoluteWidth),
+                        (int) Math.round(absoluteHeight)
+                );
+                if (pos >= startingHeight * 0.9) {
+                    jumping = true;
+                    squishing = false;
+                    squishPos = 0;
+                }
+            } else if (landing) {
+                double pos = landPos;
+
+                landPos += ((X_INCREMENT*3) * deltaRate);
+
+                absoluteHeight = calculateQuadraticY(
+                        pos,
+                        0,
+                        JUMP_LENGTH,
+                        startingHeight,
+                        startingHeight * 0.9,
+                        false
+                );
+                // System.out.println(startingHeight / absoluteHeight);
+
+                //absoluteX = startingX - (absoluteWidth/2.0);
+                absoluteY = frameSize.getHeight() - absoluteHeight;
+
+//                System.out.println(absoluteX / startingX);
+
+                setBounds(
+                        (int) Math.round(absoluteX),
+                        (int) Math.round(absoluteY),
+                        (int) Math.round(absoluteWidth),
+                        (int) Math.round(absoluteHeight)
+                );
+                if (leave) {
+                    // Dont bother actually running the landing animation, since Cababas should be out of bounds
+                    jumping = true; // Make Cababas jump again
+                } else {
+                    if (pos >= JUMP_LENGTH) {
+                        landing = false;
+                        jumping = false;
+                        squishing = false;
+
+                        landPos = 0;
+                        squishPos = 0;
+                        clock.stop();
+                    }
+                }
             }
         }
     }
