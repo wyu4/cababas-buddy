@@ -4,4 +4,4 @@
 
 Watch as a cute little Cameluo Cababas companion hops around your screen!
 
-[Click here](https://github.com/wyu4/cababas-buddy/releases/download/v0.1.0-alpha/CababasBuddy.zip) to download!
+[Click here](https://github.com/wyu4/cababas-buddy/releases/download/v0.2.2-beta/CababasBuddy.zip) to download!
