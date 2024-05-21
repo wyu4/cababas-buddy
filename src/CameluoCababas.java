@@ -86,7 +86,7 @@ public class CameluoCababas extends JButton implements ActionListener {
 
             goal = new Point(
                   getX() + (jumpMod * JUMP_LENGTH),
-                    (int)(frameSize.getHeight() - (frameSize.getHeight()/2))
+                    (int)(frameSize.getHeight() - getHeight())
             );
 
             absoluteX = getX();
@@ -151,7 +151,7 @@ public class CameluoCababas extends JButton implements ActionListener {
     }
 
     private double calculateDimension() {
-        return (frameSize.getHeight()/2);
+        return (frameSize.getWidth() * 0.12);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class CameluoCababas extends JButton implements ActionListener {
                         0,
                         JUMP_LENGTH,
                         goal.getY(),
-                        0,
+                        goal.getY() - (calculateDimension() * 0.75),
                         false
                 );
                 absoluteHeight = calculateQuadraticY(

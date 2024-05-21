@@ -21,7 +21,9 @@ public class Launcher extends JFrame implements ActionListener {
         setLayout(null);
         setBackground(new Color(0, 0, 0, 0));
         getContentPane().setBackground(new Color(0, 0, 0, 0));
-        setSize((int)(screenSize.getWidth()), (int)(screenSize.getHeight()*0.4));
+        setSize(
+                screenSize
+        );
         setLocation(0, (int)(screenSize.getHeight() - getHeight()));
         setAlwaysOnTop(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -84,7 +86,7 @@ public class Launcher extends JFrame implements ActionListener {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
-                        Thread.sleep((long) (Math.random() * 2000) + 2000);
+                        Thread.sleep((long) (Math.random() * 2000) + 3000);
                         cababas.jump();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
