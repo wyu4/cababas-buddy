@@ -1,6 +1,6 @@
 # Cababas Buddy
 
-![GithubCababas](https://github.com/wyu4/cababas-buddy/assets/139521392/5b1ce64a-8772-4e11-8b05-04c74cbb4651)
+![CababasBanner](https://github.com/wyu4/cababas-buddy/assets/139521392/58438ecb-53c6-47b3-8bed-9d24c8c131be)
 
 Watch as a cute little Cameluo Cababas companion hops around your screen!
 
