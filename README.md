@@ -8,7 +8,7 @@ Watch as a cute little Cameluo Cababas companion hops around your screen!
 
 ## Instructions
 ### Starting the app
-Run the exe located in the ZIP to spawn in a Cababas (may or may not be flagged by anti-virus)
+Run the exe located in the ZIP to spawn in a Cababas *(The program is currently unsigned. So it might trigger your anti-virus. If you don't trust the program, you can manually build it using the source code).*
 
 ![image](https://github.com/wyu4/cababas-buddy/assets/139521392/0ff542e1-f227-4249-af96-96f7c9136fb8)
 
