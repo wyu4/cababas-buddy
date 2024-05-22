@@ -16,7 +16,7 @@ The program is currently unsigned, so it will most likely trigger the Window's S
 
 ![image](https://github.com/wyu4/cababas-buddy/assets/139521392/a33d30fa-6798-4f37-9007-38f163d656f4)
 
-This can be bypassed by clicking on *more options*, and then *run anyways*.
+This can be bypassed by clicking on *more info*, and then *run anyways*.
 
 ![image](https://github.com/wyu4/cababas-buddy/assets/139521392/7310deb2-4e2e-40d3-833a-eec328e81177)
 
